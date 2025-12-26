@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PuzzleGameManager : MonoBehaviour
 {
+    public int currentLevel = 1;
+    public int totalLevels = 2;
+
     public static PuzzleGameManager Instance;
     public Puzzle[] puzzlePieces;
+
+    public GameScenceSO scenceToGo;
+    public ScenceLoadEventSO loadEventSO;
 
     private void Awake()
     {
@@ -33,10 +40,27 @@ public class PuzzleGameManager : MonoBehaviour
 
         if (isComplete)
         {
-            // 触发游戏完成逻辑
-            Debug.Log("Puzzle Complete!");
+            if (currentLevel < totalLevels)
+            {
+                // 加载下一关
+                currentLevel++;
+                Debug.Log("过关");
+                loadEventSO.RaiseLoadRequestEvent(scenceToGo, true);
+            }
+            else
+            {
+                // 游戏完成，显示结算页面等
+                Debug.Log("游戏已完成，恭喜！");
+                // 这里可以显示结算界面等
+            }
+            
         }
     }
 
-
+    // 加载指定的关卡场景
+    public void LoadLevel(int level)
+    {
+        string sceneName = "Level" + level.ToString();  // 假设场景名称为 Level1, Level2 等
+        SceneManager.LoadScene(sceneName);
+    }
 }

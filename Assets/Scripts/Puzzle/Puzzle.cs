@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PolygonCollider2D))]
 public class Puzzle : MonoBehaviour
 {
     public Vector3 correctPosition;  // 拼图块的正确位置
@@ -9,8 +10,8 @@ public class Puzzle : MonoBehaviour
     public bool IsInCorrectPosition { get; private set; }
     private Vector3 offset;
 
-    public Vector2 minBounds;  // 区域的最小点（左下角）
-    public Vector2 maxBounds;  // 区域的最大点（右上角）
+    public Vector2 minBounds = new Vector2(2.54f, -2.24f);  // 区域的最小点（左下角）
+    public Vector2 maxBounds = new Vector2(5.29f, 2.23f);  // 区域的最大点（右上角）
 
     private void Start()
     {
@@ -41,35 +42,11 @@ public class Puzzle : MonoBehaviour
         // 获取当前鼠标在世界坐标系中的位置
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        // 保持 Z 值一致
-        //mousePos.z = transform.position.z;
-
         // 更新拼图块的位置，保持与鼠标的偏移量
         transform.position = mousePos + offset;
 
         //Debug.Log("Mouse Drag: " + transform.position);
     }
-
-    //private void OnMouseUp()
-    //{
-
-    //    // 检查拼图块是否放置到正确的位置
-    //    if (Vector3.Distance(transform.position, correctPosition) < 0.5f)  // tolerance 为允许的误差
-    //    {
-    //        transform.position = Vector3.Lerp(transform.position, correctPosition, 5f * Time.deltaTime);  // 放置在正确位置
-    //        IsInCorrectPosition = true;
-    //    }
-    //    else
-    //    {
-    //        transform.position = Vector3.MoveTowards(transform.position, originalPosition, 1f * Time.deltaTime); ;  // 恢复到原始位置
-    //        IsInCorrectPosition = false;
-    //        transform.localScale = new Vector3(0.2f, 0.2f, 1);
-    //    }
-
-    //    // 检查拼图是否完成
-    //    PuzzleGameManager.Instance.CheckPuzzleCompletion();
-    //}
-
     private void OnMouseUp()
     {
         // 检查拼图块是否放置到正确的位置

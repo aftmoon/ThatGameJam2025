@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Puzzle
   - 
   - 
   - 
@@ -41,9 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Backgrount_front
-    uniqueID: 3506173357
+  - name: BackGround_front
+    uniqueID: 250578623
     locked: 0
   - name: Puzzle
-    uniqueID: 2725771121
+    uniqueID: 1611525635
     locked: 0
