@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Backgrount_front
+    uniqueID: 3506173357
+    locked: 0
+  - name: Puzzle
+    uniqueID: 2725771121
+    locked: 0

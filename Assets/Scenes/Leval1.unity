@@ -331,8 +331,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1611525635
-  m_SortingLayer: 1
+  m_SortingLayerID: -1569196175
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f871ac9358757d54191fb45665e35522, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -578,8 +578,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -788793939
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 76de0b4c1384e7b478977dac66f78a57, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -824,8 +824,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1611525635
-  m_SortingLayer: 1
+  m_SortingLayerID: -1569196175
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fac213be4cd4016479944848010a34b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1068,13 +1068,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300eb419032dc0b4ca278f0acd9c59cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 1
-  totalLevels: 2
   puzzlePieces:
   - {fileID: 266388676}
   - {fileID: 1079335162}
-  scenceToGo: {fileID: 11400000, guid: 208641649e55816429255a8a6f38e98e, type: 2}
-  loadEventSO: {fileID: 11400000, guid: 7399e58245467f64594d2e59a0558b8d, type: 2}
 --- !u!4 &1805860147
 Transform:
   m_ObjectHideFlags: 0
