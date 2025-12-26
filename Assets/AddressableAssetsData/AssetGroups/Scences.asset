@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Scences
+  m_EditorClassIdentifier: 
+  m_GroupName: Scences
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b1c3db331d824674cad8c6fe07fecb17
+  m_SerializeEntries:
+  - m_GUID: 0bd561ebad7d0bd4cb589483a92f9a31
+    m_Address: Leval1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed0b5db1a71090541a43e097aeb260b2
+    m_Address: Leval2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f33a8fefac106d94abefc2a26d2f2dfa, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7e00f2e30b046d547a19d76e2e4b4bef, type: 2}
+    - {fileID: 11400000, guid: 797e0487cba743645a0c582eab52680e, type: 2}
