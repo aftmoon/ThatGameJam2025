@@ -657,8 +657,8 @@
     <Compile Include="Assets\Fungus\Scripts\VariableTypes\CollectionVariable.cs" />
     <Compile Include="Assets\Fungus\Scripts\Commands\Label.cs" />
     <Compile Include="Assets\Fungus\Scripts\VariableTypes\IntegerVariable.cs" />
-    <Compile Include="Assets\Fungus\Scripts\Utils\ConversationManager.cs" />
     <Compile Include="Assets\Fungus\Scripts\Commands\iTweenCommand.cs" />
+    <Compile Include="Assets\Fungus\Scripts\Utils\ConversationManager.cs" />
     <Compile Include="Assets\Fungus\Scripts\Commands\Collection\CollectionCommandCopy.cs" />
     <Compile Include="Assets\Fungus\Thirdparty\FungusLua\Thirdparty\MoonSharp\Debugger\SDK\DebugSession.cs" />
     <Compile Include="Assets\Fungus\Scripts\Commands\Math\Trig.cs" />
