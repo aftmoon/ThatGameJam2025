@@ -12,7 +12,11 @@ public class PuzzleGameManager : MonoBehaviour
     public Puzzle[] puzzlePieces;
 
     public GameScenceSO scenceToGo;
+    public GameScenceSO daytimeScene;
     public ScenceLoadEventSO loadEventSO;
+
+    //public int sumDay = 3;
+    //private int currentDay = 0;
 
     private void Awake()
     {
@@ -26,7 +30,7 @@ public class PuzzleGameManager : MonoBehaviour
         }
     }
 
-    public void CheckPuzzleCompletion()
+    public void CheckPuzzleCompletion() 
     {
         bool isComplete = true;
         foreach (var piece in puzzlePieces)
@@ -51,7 +55,13 @@ public class PuzzleGameManager : MonoBehaviour
             {
                 // 游戏完成，显示结算页面等
                 Debug.Log("游戏已完成，恭喜！");
+                loadEventSO.RaiseLoadRequestEvent(daytimeScene, true);
                 // 这里可以显示结算界面等
+                //currentDay++;
+                //if (currentDay <= sumDay)
+                //    loadEventSO.RaiseLoadRequestEvent(scenceToGo, true);
+                //else
+                //    loadEventSO.RaiseLoadRequestEvent(backToDayWorkScene);
             }
             
         }

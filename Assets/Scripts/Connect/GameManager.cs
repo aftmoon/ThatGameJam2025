@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public LayerMask nodeLayer;
+    public Transform nodesRoot;
+    public Node[] allNodes;
     public Node selectedNode;
     public GameObject linePrefab;
     private LineRenderer previewLine;//跟随鼠标走
@@ -18,6 +21,9 @@ public class GameManager : MonoBehaviour
 
     // 所有连线（用于检测断线）
     private List<NodeConnection> allConnections = new List<NodeConnection>();
+    //交叉检测
+    public float lineIntersectThreshold = 0.3f;
+
 
     // 鼠标当前指向的连线
     private NodeConnection hoveredConnection;
@@ -25,10 +31,23 @@ public class GameManager : MonoBehaviour
     // 鼠标距离线多近算点中
     public float disconnectThreshold = 0.15f;
 
+    [Header("场景转换")]
+    public GameScenceSO scenceToGo;
+    public ScenceLoadEventSO loadEventSO;
+    bool hasFinished = false;
+
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;  // 初始化单例实例
+        }
+        else
+        {
+            Destroy(gameObject);  // 确保场景中只有一个实例
+        }
+        allNodes = nodesRoot.GetComponentsInChildren<Node>();
     }
 
     void Update()
@@ -41,6 +60,7 @@ public class GameManager : MonoBehaviour
         {
             UpdatePreviewLine();
         }
+        CheckConnectCompletion();
     }
 
     void HandleMouseInput()
@@ -86,7 +106,7 @@ public class GameManager : MonoBehaviour
             TryCreateConnection(selectedNode, endNode);
         }
 
-        
+
         ClearPreviewLine();
         selectedNode = null;
         isDragging = false;
@@ -150,8 +170,9 @@ public class GameManager : MonoBehaviour
         // 2. 不能重复连接
         if (IsAlreadyConnected(a, b)) return;
 
-        // 3. 可选：距离 / 方向校验
-        // if (!IsValidDirection(a, b)) return;
+        // 3. 不能交叉
+        if (WillIntersectExistingConnections(a, b))
+            return;
 
         // 4. 创建线
         GameObject lineObj = Instantiate(linePrefab);
@@ -187,6 +208,91 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+
+    bool WillIntersectExistingConnections(Node a, Node b)
+    {
+        Vector3 p1 = a.transform.position;
+        Vector3 p2 = b.transform.position;
+
+        foreach (var c in allConnections)
+        {
+            //共享端点的线不算交叉
+            if (c.nodeA == a || c.nodeA == b ||
+                c.nodeB == a || c.nodeB == b)
+                continue;
+
+            Vector3 q1 = c.nodeA.transform.position;
+            Vector3 q2 = c.nodeB.transform.position;
+
+            float dist = DistanceBetweenSegments(p1, p2, q1, q2);
+
+            if (dist < lineIntersectThreshold)
+            {
+                return true; // 发生交叉
+            }
+        }
+
+        return false;
+    }
+
+    float DistanceBetweenSegments(Vector3 p1, Vector3 p2, Vector3 q1, Vector3 q2)
+    {
+        Vector3 d1 = p2 - p1;
+        Vector3 d2 = q2 - q1;
+        Vector3 r = p1 - q1;
+
+        float a = Vector3.Dot(d1, d1);
+        float e = Vector3.Dot(d2, d2);
+        float f = Vector3.Dot(d2, r);
+
+        float s, t;
+
+        if (a <= Mathf.Epsilon && e <= Mathf.Epsilon)
+        {
+            return Vector3.Distance(p1, q1);
+        }
+
+        if (a <= Mathf.Epsilon)
+        {
+            s = 0;
+            t = Mathf.Clamp01(f / e);
+        }
+        else
+        {
+            float c = Vector3.Dot(d1, r);
+            if (e <= Mathf.Epsilon)
+            {
+                t = 0;
+                s = Mathf.Clamp01(-c / a);
+            }
+            else
+            {
+                float b = Vector3.Dot(d1, d2);
+                float denom = a * e - b * b;
+
+                s = denom != 0 ? Mathf.Clamp01((b * f - c * e) / denom) : 0;
+                t = (b * s + f) / e;
+
+                if (t < 0)
+                {
+                    t = 0;
+                    s = Mathf.Clamp01(-c / a);
+                }
+                else if (t > 1)
+                {
+                    t = 1;
+                    s = Mathf.Clamp01((b - c) / a);
+                }
+            }
+        }
+
+        Vector3 cp1 = p1 + d1 * s;
+        Vector3 cp2 = q1 + d2 * t;
+
+        return Vector3.Distance(cp1, cp2);
+    }
+
+
 
     Vector3 GetMouseWorldPos()
     {
@@ -249,5 +355,54 @@ public class GameManager : MonoBehaviour
         allConnections.Remove(c);
     }
 
+    public void CheckConnectCompletion()
+    {
+        bool isComplete = true;
+        foreach (var node in allNodes)
+        {
+            if (node.currentConnections != node.maxConnections)
+            {
+                isComplete = false;
+                break;
+            }
+        }
+        if (isComplete && !hasFinished)
+        {
+            hasFinished = true;
+            Debug.Log("连线已完成");
+            ClearAllConnections();
+            loadEventSO.RaiseLoadRequestEvent(scenceToGo, true);
+        }
+    }
+    public void ClearAllConnections()
+    {
+        // 1. 删除所有连线 GameObject
+        foreach (var c in allConnections)
+        {
+            if (c.lineRenderer != null)
+            {
+                Destroy(c.lineRenderer.gameObject);
+            }
+        }
+
+        // 2. 清空每个 Node 的数据
+        Node[] nodes = FindObjectsOfType<Node>();
+        foreach (var node in nodes)
+        {
+            node.connections.Clear();
+            node.currentConnections = 0;
+        }
+
+        // 3. 清空总列表
+        allConnections.Clear();
+
+        // 4. 清理预览线（如果正在拖）
+        ClearPreviewLine();
+        selectedNode = null;
+        isDragging = false;
+    }
 
 }
+
+
+

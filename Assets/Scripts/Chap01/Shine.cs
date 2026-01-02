@@ -1,3 +1,4 @@
+using Fungus;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,9 @@ public class Shine : MonoBehaviour
     public SpriteRenderer shiningPrefab;
     private Animator animator;
     private PolygonCollider2D polygonCollider;
+    public Flowchart flowchart;
 
-    private bool hasBeenClicked = false;
-
+    public bool HasBeenClicked { get; private set; }
     private void Start()
     {
         shiningPrefab = GetComponent<SpriteRenderer>();
@@ -25,15 +26,17 @@ public class Shine : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //if (hasBeenClicked) return;
+        bool dialogIsEnd = flowchart.GetBooleanVariable("isEnd");
+        if (dialogIsEnd == false) return;
 
-        hasBeenClicked = true;
+        HasBeenClicked = true;
 
         if (animator != null)
         {
             animator.SetTrigger("PlayAnimation");
 
         }
-            shiningPrefab.color = new Color(1f, 1f, 1f);
+        shiningPrefab.color = new Color(1f, 1f, 1f);
+        DialogController.Instance.CheckLevelCompletion();
     }
 }

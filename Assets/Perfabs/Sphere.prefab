@@ -255,7 +255,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxConnections: 1
   currentConnections: 0
-  textMeshPro: {fileID: 0}
 --- !u!1 &9061090608005019562
 GameObject:
   m_ObjectHideFlags: 0
